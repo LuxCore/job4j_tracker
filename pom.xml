@@ -10,8 +10,8 @@
 
     <properties>
         <maven.compiler.plugin>3.13.0</maven.compiler.plugin>
-        <maven.compiler.source>22</maven.compiler.source>
-        <maven.compiler.target>22</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <maven.surefire.plugin>3.3.1</maven.surefire.plugin>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.jupiter.engine>5.10.3</junit.jupiter.engine>
