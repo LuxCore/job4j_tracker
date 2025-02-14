@@ -8,7 +8,8 @@ import ru.job4j.tracker.action.FindByIdAction;
 import ru.job4j.tracker.action.FindByNameAction;
 import ru.job4j.tracker.action.ReplaceAction;
 import ru.job4j.tracker.action.UserAction;
-import ru.job4j.tracker.core.Tracker;
+import ru.job4j.tracker.core.MemTracker;
+import ru.job4j.tracker.core.Store;
 import ru.job4j.tracker.io.ConsoleInput;
 import ru.job4j.tracker.io.ConsoleOutput;
 import ru.job4j.tracker.io.Input;
@@ -23,7 +24,7 @@ public class StartUI {
 		this.out = output;
 	}
 
-	public void init(Input input, Tracker tracker, UserAction[] actions) {
+	public void init(Input input, Store tracker, UserAction[] actions) {
 		boolean isRun = true;
 		while (isRun) {
 			showMenu(actions);
@@ -48,7 +49,7 @@ public class StartUI {
 	public static void main(String[] args) {
 		Output output = new ConsoleOutput();
 		Input input = new ValidateInput(new ConsoleInput(), output);
-		Tracker tracker = new Tracker();
+		Store tracker = new MemTracker();
 		UserAction[] actions = {
 				new CreateAction(output),
 				new FindAllAction(output),

@@ -6,12 +6,15 @@ import ru.job4j.tracker.action.DeleteAction;
 import ru.job4j.tracker.action.ExitAction;
 import ru.job4j.tracker.core.Item;
 import ru.job4j.tracker.action.ReplaceAction;
-import ru.job4j.tracker.core.Tracker;
+import ru.job4j.tracker.core.MemTracker;
 import ru.job4j.tracker.action.UserAction;
+import ru.job4j.tracker.core.Store;
 import ru.job4j.tracker.io.Input;
 import ru.job4j.tracker.io.MockInput;
 import ru.job4j.tracker.io.Output;
 import ru.job4j.tracker.io.StubOutput;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,18 +25,18 @@ class StartUITest {
 				new String[]{"0", "Item name", "1"}
 		);
 		Output output = new StubOutput();
-		Tracker tracker = new Tracker();
+		Store tracker = new MemTracker();
 		UserAction[] actions = {
 				new CreateAction(output),
 				new ExitAction(output)
 		};
 		new StartUI(output).init(input, tracker, actions);
-		assertThat(tracker.findAll()[0].getName()).isEqualTo("Item name");
+		assertThat(tracker.findAll().getFirst().getName()).isEqualTo("Item name");
 	}
 
 	@Test
 	void whenReplaceItem() {
-		Tracker tracker = new Tracker();
+		Store tracker = new MemTracker();
 		tracker.add(new Item("Replaced item"));
 		String replacedName = "New item name";
 		Input input = new MockInput(
@@ -50,7 +53,7 @@ class StartUITest {
 
 	@Test
 	void whenDeleteItem() {
-		Tracker tracker = new Tracker();
+		Store tracker = new MemTracker();
 		Item item = tracker.add(new Item("Deleted item"));
 		Input input = new MockInput(
 				new String[] {"0", "1", "1"}
@@ -70,7 +73,7 @@ class StartUITest {
 		Input input = new MockInput(
 				new String[] {"0"}
 		);
-		Tracker tracker = new Tracker();
+		Store tracker = new MemTracker();
 		UserAction[] actions = {
 				new ExitAction(output)
 		};
@@ -86,7 +89,7 @@ class StartUITest {
 	@Test
 	void whenReplaceItemTestOutputIsSuccessfully() {
 		Output output = new StubOutput();
-		Tracker tracker = new Tracker();
+		Store tracker = new MemTracker();
 		Item taskOne = tracker.add(new Item("test1"));
 		String replaceName = "New Test Name";
 		Input input = new MockInput(
@@ -97,7 +100,7 @@ class StartUITest {
 				new ExitAction(output)
 		};
 		new StartUI(output).init(input, tracker, actions);
-		Item[] foundTasks = tracker.findByName(replaceName);
+		List<Item> foundTasks = tracker.findByName(replaceName);
 		String ln = System.lineSeparator();
 		assertThat(output.toString()).isEqualTo(
 				"Меню:" + ln
@@ -107,7 +110,7 @@ class StartUITest {
 						+ "=== Замена заявки ===" + ln
 						+ "Заявка заменена успешно:" + ln
 						+ "\tСтарая заявка: " + taskOne + ln
-						+ "\tНовая заявка: " + foundTasks[0] + ln + ln
+						+ "\tНовая заявка: " + foundTasks.get(0) + ln + ln
 						+ "Меню:" + ln
 						+ "0. Изменить заявку." + ln
 						+ "1. Завершить программу." + ln
@@ -122,7 +125,7 @@ class StartUITest {
 		Input input = new MockInput(
 				new String[] {"999", "0"}
 		);
-		Tracker tracker = new Tracker();
+		Store tracker = new MemTracker();
 		UserAction[] actions = new UserAction[]{
 				new ExitAction(output)
 		};

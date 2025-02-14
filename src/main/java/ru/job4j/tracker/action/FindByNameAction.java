@@ -1,9 +1,11 @@
 package ru.job4j.tracker.action;
 
 import ru.job4j.tracker.core.Item;
-import ru.job4j.tracker.core.Tracker;
+import ru.job4j.tracker.core.Store;
 import ru.job4j.tracker.io.Input;
 import ru.job4j.tracker.io.Output;
+
+import java.util.List;
 
 public class FindByNameAction implements UserAction {
 	public static final String LINE_SEPARATOR = System.lineSeparator();
@@ -19,11 +21,11 @@ public class FindByNameAction implements UserAction {
 	}
 
 	@Override
-	public boolean execute(Input input, Tracker tracker) {
+	public boolean execute(Input input, Store tracker) {
 		out.println(LINE_SEPARATOR + "=== Вывод заявок по имени ===");
 		String taskName = input.askString("Введите имя заявки: ");
-		Item[] items = tracker.findByName(taskName);
-		if (items.length > 0) {
+		List<Item> items = tracker.findByName(taskName);
+		if (!items.isEmpty()) {
 			StringBuilder sb = new StringBuilder("Заявки по имени: " + LINE_SEPARATOR);
 			for (Item item : items) {
 				sb.append(item).append(LINE_SEPARATOR);

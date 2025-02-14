@@ -1,7 +1,7 @@
 package ru.job4j.tracker.action;
 
 import ru.job4j.tracker.core.Item;
-import ru.job4j.tracker.core.Tracker;
+import ru.job4j.tracker.core.Store;
 import ru.job4j.tracker.io.Input;
 import ru.job4j.tracker.io.Output;
 
@@ -19,12 +19,12 @@ public class DeleteAction implements UserAction {
 	}
 
 	@Override
-	public boolean execute(Input input, Tracker tracker) {
+	public boolean execute(Input input, Store tracker) {
 		out.println(LINE_SEPARATOR + "=== Удаление заявки ===");
 		int id = input.askInt("Введите id заявки для удаления: ");
 		Item oldItem = tracker.findById(id);
-		boolean isItemDeleted = tracker.delete(id);
-		if (isItemDeleted) {
+		tracker.delete(id);
+		if (tracker.findById(id) == null) {
 			String output = "Заявка удалена успешно:" + LINE_SEPARATOR
 					+ "\tСтарая заявка: " + oldItem + LINE_SEPARATOR;
 			out.println(output);

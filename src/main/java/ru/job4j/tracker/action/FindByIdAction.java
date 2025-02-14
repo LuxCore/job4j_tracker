@@ -1,7 +1,7 @@
 package ru.job4j.tracker.action;
 
 import ru.job4j.tracker.core.Item;
-import ru.job4j.tracker.core.Tracker;
+import ru.job4j.tracker.core.Store;
 import ru.job4j.tracker.io.Input;
 import ru.job4j.tracker.io.Output;
 
@@ -19,7 +19,7 @@ public class FindByIdAction implements UserAction {
 	}
 
 	@Override
-	public boolean execute(Input input, Tracker tracker) {
+	public boolean execute(Input input, Store tracker) {
 		out.println(LINE_SEPARATOR + "=== Вывод заявки по id ===");
 		int id = input.askInt("Введите id нужной заявки: ");
 		Item item = tracker.findById(id);

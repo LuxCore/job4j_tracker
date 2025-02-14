@@ -1,6 +1,6 @@
 package ru.job4j.tracker.action;
 
-import ru.job4j.tracker.core.Tracker;
+import ru.job4j.tracker.core.Store;
 import ru.job4j.tracker.io.Input;
 import ru.job4j.tracker.io.Output;
 
@@ -17,7 +17,7 @@ public class ExitAction implements UserAction {
 	}
 
 	@Override
-	public boolean execute(Input input, Tracker tracker) {
+	public boolean execute(Input input, Store tracker) {
 		out.println(System.lineSeparator() + "=== Завершение программы ===");
 		return false;
 	}

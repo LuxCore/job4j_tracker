@@ -1,8 +1,9 @@
 package ru.job4j.tracker.core;
 
 import java.util.Arrays;
+import java.util.List;
 
-public class Tracker {
+public class MemTracker implements Store {
 	private final Item[] items = new Item[100];
 	private int ids = 1;
 	private int size = 0;
@@ -29,11 +30,11 @@ public class Tracker {
 		return index != -1 ? items[index] : null;
 	}
 
-	public Item[] findAll() {
-		return Arrays.copyOf(items, size);
+	public List<Item> findAll() {
+		return Arrays.asList(items);
 	}
 
-	public Item[] findByName(String key) {
+	public List<Item> findByName(String key) {
 		byte resultsSize = 0;
 		Item[] results = new Item[size];
 		for (int index = 0; index < size; index++) {
@@ -41,7 +42,7 @@ public class Tracker {
 				results[resultsSize++] = items[index];
 			}
 		}
-		return Arrays.copyOf(results, resultsSize);
+		return Arrays.asList(Arrays.copyOf(results, resultsSize));
 	}
 
 	public boolean replace(int id, Item item) {
@@ -55,16 +56,18 @@ public class Tracker {
 		return result;
 	}
 
-	public boolean delete(int id) {
-		boolean result = false;
+	public void delete(int id) {
 		int itemIndexToDelete = indexOf(id);
 		if (itemIndexToDelete != -1) {
 			if (itemIndexToDelete < size - 1) {
 				System.arraycopy(items, itemIndexToDelete + 1, items, itemIndexToDelete, size - itemIndexToDelete - 1);
 			}
 			items[size-- - 1] = null;
-			result = true;
 		}
-		return result;
+	}
+
+	@Override
+	public void close() throws Exception {
+
 	}
 }

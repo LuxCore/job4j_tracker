@@ -1,9 +1,11 @@
 package ru.job4j.tracker.action;
 
 import ru.job4j.tracker.core.Item;
-import ru.job4j.tracker.core.Tracker;
+import ru.job4j.tracker.core.Store;
 import ru.job4j.tracker.io.Input;
 import ru.job4j.tracker.io.Output;
+
+import java.util.List;
 
 public class FindAllAction implements UserAction {
 	public static final String LINE_SEPARATOR = System.lineSeparator();
@@ -19,10 +21,10 @@ public class FindAllAction implements UserAction {
 	}
 
 	@Override
-	public boolean execute(Input input, Tracker tracker) {
+	public boolean execute(Input input, Store tracker) {
 		out.println(LINE_SEPARATOR + "=== Вывод всех заявок ===");
-		Item[] items = tracker.findAll();
-		if (items.length == 0) {
+		List<Item> items = tracker.findAll();
+		if (items.isEmpty()) {
 			out.println("В хранилище нет заявок. Создайте хотя бы одну заявку." + LINE_SEPARATOR);
 			return true;
 		}
