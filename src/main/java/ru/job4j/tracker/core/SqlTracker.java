@@ -26,16 +26,17 @@ public class SqlTracker implements Store {
 	}
 
 	private void initConnection() {
-		try (InputStream in = SqlTracker.class.getClassLoader().getResourceAsStream("app.properties")) {
+		String dbProps = "db/liquibase/liquibase.properties";
+		try (InputStream in = SqlTracker.class.getClassLoader().getResourceAsStream(dbProps)) {
 			Properties config = new Properties();
 			config.load(in);
-			Class.forName(config.getProperty("db.driver"));
+			Class.forName(config.getProperty("driver"));
 			connection = DriverManager.getConnection(
-					config.getProperty("db.url"),
-					config.getProperty("db.user"),
-					config.getProperty("db.password"));
+					config.getProperty("url"),
+					config.getProperty("username"),
+					config.getProperty("password"));
 		} catch (IOException e) {
-			throw new RuntimeException("Ошибка при чтении файла 'app.properties'.");
+			throw new RuntimeException("Ошибка при чтении файла '%s'.".formatted(dbProps));
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException("Не удалось найти драйвер базы данных.");
 		} catch (SQLException e) {
