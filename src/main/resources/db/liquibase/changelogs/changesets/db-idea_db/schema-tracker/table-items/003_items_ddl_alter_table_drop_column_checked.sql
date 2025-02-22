@@ -1,0 +1,1 @@
+ALTER TABLE tracker.items DROP COLUMN checked;
