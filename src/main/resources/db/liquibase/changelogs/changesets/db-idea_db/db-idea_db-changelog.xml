@@ -10,6 +10,6 @@
 			http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 			http://www.liquibase.org/xml/ns/pro
 			http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
-	<include file="changesets/db-idea_db/db-idea_db-changelog.xml"
+	<include file="schema-tracker/schema-tracker-changelog.xml"
 	         relativeToChangelogFile="true"/>
 </databaseChangeLog>

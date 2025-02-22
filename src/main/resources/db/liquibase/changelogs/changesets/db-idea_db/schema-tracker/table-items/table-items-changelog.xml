@@ -10,8 +10,10 @@
 			http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 			http://www.liquibase.org/xml/ns/pro
 			http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
-	<include file="tracker-schema/001_tracker_ddl_create_schema.sql"
+	<include file="001_items_ddl_create_table.sql"
 	         relativeToChangelogFile="true"/>
-	<include file="tracker-schema/tables/items/001_items_ddl_create_table.sql"
+	<include file="002_items_ddl_alter_table_add_column_checked.sql"
+	         relativeToChangelogFile="true"/>
+	<include file="003_items_ddl_alter_table_drop_column_checked.sql"
 	         relativeToChangelogFile="true"/>
 </databaseChangeLog>
