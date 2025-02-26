@@ -1,8 +1,0 @@
-CREATE SCHEMA tracker;
-
-CREATE TABLE tracker.items(
-	id INTEGER GENERATED ALWAYS AS IDENTITY,
-	name TEXT,
-	created TIMESTAMPTZ,
-	CONSTRAINT items_pk PRIMARY KEY(id)
-);

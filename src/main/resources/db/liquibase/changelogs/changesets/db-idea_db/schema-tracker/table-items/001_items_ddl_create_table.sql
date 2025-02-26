@@ -1,6 +1,6 @@
 CREATE TABLE tracker.items(
 	id INTEGER GENERATED ALWAYS AS IDENTITY,
 	name TEXT,
-	created TIMESTAMPTZ,
+	created TIMESTAMP,
 	CONSTRAINT items_pk PRIMARY KEY(id)
 );

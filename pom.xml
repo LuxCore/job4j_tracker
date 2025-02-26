@@ -26,6 +26,35 @@
         <liquibase>4.31.1</liquibase>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>test</id>
+            <properties>
+                <liquibase.propertyFile>
+                    src/test/resources/db/liquibase/liquibase-test.properties
+                </liquibase.propertyFile>
+                <liquibase.changeLogFile>
+                    src/main/resources/db/liquibase/changelogs/master-changelog.xml
+                </liquibase.changeLogFile>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+
+        <profile>
+            <id>production</id>
+            <properties>
+                <liquibase.propertyFile>
+                    src/main/resources/db/liquibase/liquibase.properties
+                </liquibase.propertyFile>
+                <liquibase.changeLogFile>
+                    src/main/resources/db/liquibase/changelogs/master-changelog.xml
+                </liquibase.changeLogFile>
+            </properties>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -64,6 +93,16 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -151,8 +190,27 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${liquibase}</version>
                 <configuration>
-                    <propertyFile>src/main/resources/db/liquibase/liquibase.properties</propertyFile>
+                    <propertyFile>${liquibase.propertyFile}</propertyFile>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>clear-checksums</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>clearCheckSums</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>update-database</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                        <configuration>
+                            <changeLogFile>${liquibase.changeLogFile}</changeLogFile>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -1,17 +1,21 @@
 package ru.job4j.tracker.core;
 
+import org.h2.tools.DeleteDbFiles;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Properties;
 import java.util.StringJoiner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,23 +26,33 @@ class SqlTrackerTest {
 	private static SqlTracker tracker;
 
 	@BeforeAll
-	static void setup() throws SQLException {
-		String h2Url = "jdbc:h2:mem:%s;MODE=PostgreSQL;INIT=RUNSCRIPT FROM '%s'"
-				.formatted("tracker_dkitrish_db", "src/test/resources/beforeAll.sql");
-		connection = DriverManager.getConnection(h2Url);
-		tracker = new SqlTracker(connection);
+	static void setup() throws IOException, ClassNotFoundException, SQLException {
+		String dbProps = "db/liquibase/liquibase-test.properties";
+		try (InputStream in = SqlTrackerTest.class.getClassLoader().getResourceAsStream(dbProps)) {
+			Properties properties = new Properties();
+			properties.load(in);
+			Class.forName(properties.getProperty("driver"));
+			connection = DriverManager.getConnection(
+					properties.getProperty("url"),
+					properties.getProperty("username"),
+					properties.getProperty("password"));
+			tracker = new SqlTracker(connection);
+		}
 	}
 
 	@AfterAll
 	static void tearDown() throws SQLException {
-		tracker.close();
+		if (tracker != null) {
+			tracker.close();
+		}
+		DeleteDbFiles.execute("~", "tracker_dkitrish_db", true);
 	}
 
 	@BeforeEach
 	void initSchema() throws SQLException {
 		Statement statement = connection.createStatement();
 		StringJoiner joiner = new StringJoiner(System.lineSeparator());
-		statement.executeUpdate(joiner.add("CREATE TABLE tracker.items (")
+		statement.executeUpdate(joiner.add("CREATE TABLE IF NOT EXISTS tracker.items (")
 				.add("\tid INTEGER GENERATED ALWAYS AS IDENTITY,")
 				.add("\tname TEXT,")
 				.add("\tcreated TIMESTAMP,")
